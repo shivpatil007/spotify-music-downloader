@@ -1,6 +1,5 @@
 body {
-  background: url("../images/204161-spotify-wallpaper.png") center/cover
-    no-repeat;
+  background: url("images/204161-spotify-wallpaper.png") center/cover no-repeat;
   height: 100vh;
   margin: 0;
   display: flex;

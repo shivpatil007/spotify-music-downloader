@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, Response, jsonify, request, render_template
 from flask_restful import Resource, Api
 from spotify_downloader import spoti_tube
 
@@ -11,12 +11,12 @@ class Hello(Resource):
 
     def get(self):
 
-        return jsonify({'message': 'hello world'})
+        return Response(response=render_template('index.html'), status=200, mimetype="text/html")
 
     def post(self):
 
-        data = request.get_json()     # status code
-        return jsonify({'data': data}), 201
+        data = request.form['to-dow-link']     # status code
+        print(data)
 
 
 class Square(Resource):

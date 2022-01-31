@@ -5,25 +5,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../static/styles.css">
     <title>Document</title>
-    <script type="text/javascript" src="../script/main.js"></script>
+    <script type="text/javascript" src="../static/main.js"></script>
 </head>
 
-<body>
+<body id="bgr">
 
     <ul class="menu-bar">
-        <li type="button" onclick="splist(1)">Spotify playlist</li>
-        <li type="button" onclick="splist(2)">Spotify song</li>
-        <li type="button" onclick="splist(3)">Youtube playlist</li>
-        <li type="button" onclick="splist(4)">Youtube vedio</li>
+        <li type="button" onclick="splist('block','none','none','none');bgrchange(1);">Spotify playlist</li>
+        <li type="button" onclick="splist('none','block','none','none');bgrchange(1);">Spotify song</li>
+        <li type="button" onclick="splist('none','none','block','none');bgrchange(2);">Youtube playlist</li>
+        <li type="button" onclick="splist('none','none','none','block');bgrchange(2);">Youtube vedio</li>
 
     </ul>
     <div class="box">
 
-        <form action="">
+        <form action="#" method="post">
             <div class="inputBox">
-                <input type="text" name="" required="">
+                <input type="url" name="to-dow-link" required="">
                 <label for="" id="sp-list" style="display:block">Spotify Playlist Url</label>
                 <label for="" id="sp-song" style="display:none">Spotify Song Url</label>
                 <label for="" id="yt-list" style="display:none">Youtube Playlist Url</label>
