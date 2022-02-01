@@ -8,6 +8,10 @@ function splist(t1,t2,t3,t4) {
 
 }
 
+function open_load() {
+    document.getElementById("main-page").style.display='none';
+    document.getElementById("load").style.display='block';
+}
 
 function bgrchange(temp){
     if(temp==1) {
