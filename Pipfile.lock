@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "cf586c034bdd3dd634b110cb887fe133f8f021dc6bb46f8ea8dca68a8b55c8fc"
+            "sha256": "1c64f4a8ea12a5d401807af9a41a81d1a6f82eceaaf9f8394def1b4a2000da89"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -170,12 +170,8 @@
             "version": "==2.0.1"
         },
         "pytube": {
-            "hashes": [
-                "sha256:21d2d151e6525f9f79401ae7a74a7de1e2bb1c00ede5d77c89e22d496389c5f1",
-                "sha256:bf2b350e8e991f82b874928f5f1ba1a733a9848d650b01b08fabdf85eea15356"
-            ],
-            "index": "pypi",
-            "version": "==11.0.2"
+            "git": "https://github.com/pytube/pytube",
+            "ref": "56ccab4f9cbfa989c418e93a42ef00b424fc05f4"
         },
         "pytz": {
             "hashes": [

@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 urllib3 = "*"
 regex = "*"
-pytube = "*"
+pytube = {git = "https://github.com/pytube/pytube"}
 spotipy = "*"
 flask = "*"
 flask-restful = "*"

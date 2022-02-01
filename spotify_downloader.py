@@ -23,7 +23,9 @@ def get_song_number(playlist_link):
     return song_number
 
 
-def spoti_tube(playlist_URI):
+def spoti_tube(playlist_link):
+    print(playlist_link)
+    playlist_URI = playlist_link.split("/")[-1].split("?")[0]
     plalist_songs_name = []
 
     for track in sp.playlist_tracks(playlist_URI)["items"]:
