@@ -7,6 +7,8 @@ function splist(t1,t2,t3,t4) {
 
 
 }
+
+
 function bgrchange(temp){
     if(temp==1) {
     document.getElementById("bgr").style.backgroundImage = "url(static/images/204161-spotify-wallpaper.png)";
@@ -15,3 +17,5 @@ if(temp==2) {
     document.getElementById("bgr").style.backgroundImage = "url(static/images/wallpaper2you_31485.jpg)";
 }
 }
+
+

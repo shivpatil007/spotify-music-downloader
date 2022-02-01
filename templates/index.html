@@ -19,9 +19,10 @@
         <li type="button" onclick="splist('none','none','none','block');bgrchange(2);">Youtube vedio</li>
 
     </ul>
+    {% if box %}
     <div class="box">
 
-        <form action="#" method="post">
+        <form action="" method="post">
             <div class="inputBox">
                 <input type="url" name="to-dow-link" required="">
                 <label for="" id="sp-list" style="display:block">Spotify Playlist Url</label>
@@ -30,8 +31,42 @@
                 <label for="" id="yt-song" style="display:none">Youtube Song Url</label>
             </div>
             <input type="submit" name="" value="Submit">
+
         </form>
+
     </div>
+    {% else %}
+    <div class="loading">
+        <table>
+            <tr>
+                <td>
+                    <div class='image'>
+                        <img src="../static/images/XOsX.gif" alt="">
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <h4 class="wordCarousel">
+
+                            <div>
+                                <!-- Use classes 2,3, or 4 to match the number of words -->
+                                <ul class="flip4">
+                                    <li>Converting</li>
+                                    <li>Almost done..</li>
+                                    <li>Converting</li>
+                                    <li>Almost done..</li>
+                                </ul>
+                            </div>
+                            <span>1 of {{ songs_number }} </span>
+                        </h4>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+
+    </div>
+    {% endif %}
 
 </body>
 

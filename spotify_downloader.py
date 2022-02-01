@@ -7,7 +7,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from pytube import YouTube
 import config
 from zipfile import ZipFile
-import threading
+
 cid = config.cid
 secret = config.secret
 client_credentials_manager = SpotifyClientCredentials(
@@ -16,20 +16,11 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 linkk = "https://open.spotify.com/playlist/62GAcyFWeutrREPqFeYIxV?si=2c9263dfa2e948b8"
 
 
-def spoti_tube_thread(playlist_link):
+def get_song_number(playlist_link):
     playlist_URI = playlist_link.split("/")[-1].split("?")[0]
-    t1 = threading.Thread(target=get_song_number, args=[playlist_URI])
-    t2 = threading.Thread(target=spoti_tube, args=[playlist_URI])
-    t1.start()
-    t2.start()
-    t1.join()
-    t2.join()
-
-
-def get_song_number(playlist_URI):
-
     song_number = len(sp.playlist_tracks(playlist_URI)["items"])
     print(song_number)
+    return song_number
 
 
 def spoti_tube(playlist_URI):
@@ -59,6 +50,3 @@ def spoti_tube(playlist_URI):
     myzip.close()
 
     print("Done")
-
-
-spoti_tube_thread(linkk)

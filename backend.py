@@ -1,6 +1,6 @@
 from flask import Flask, Response, jsonify, request, render_template
 from flask_restful import Resource, Api
-from spotify_downloader import spoti_tube
+import spotify_downloader
 
 app = Flask(__name__)
 
@@ -11,12 +11,12 @@ class Hello(Resource):
 
     def get(self):
 
-        return Response(response=render_template('index.html'), status=200, mimetype="text/html")
+        return Response(response=render_template('index.html', box=True), status=200, mimetype="text/html")
 
     def post(self):
-
         data = request.form['to-dow-link']     # status code
-        print(data)
+        songs_number = 4  # spotify_downloader.get_song_number(data)
+        return Response(response=render_template('index.html', songs_number=songs_number, box=False), status=200, mimetype="text/html")
 
 
 class Square(Resource):
