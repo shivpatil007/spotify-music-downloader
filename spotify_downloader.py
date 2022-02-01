@@ -4,7 +4,7 @@ import os
 import sys
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-from pytube import YouTube
+from pytube.__init__ import YouTube
 import config
 from zipfile import ZipFile
 
@@ -52,3 +52,6 @@ def spoti_tube(playlist_link):
     myzip.close()
 
     print("Done")
+
+
+spoti_tube(linkk)
