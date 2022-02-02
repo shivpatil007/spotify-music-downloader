@@ -5,13 +5,13 @@ import sys
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from pytube.__init__ import YouTube
-import config
 from zipfile import ZipFile
+from boto.s3.connection import S3Connection
 
-cid = config.cid
-secret = config.secret
+cid = S3Connection(os.environ['cid'])
+csecret = S3Connection(os.environ['csecret'])
 client_credentials_manager = SpotifyClientCredentials(
-    client_id=cid, client_secret=secret)
+    client_id=cid, client_secret=csecret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 linkk = "https://open.spotify.com/playlist/62GAcyFWeutrREPqFeYIxV?si=2c9263dfa2e948b8"
 
@@ -52,6 +52,3 @@ def spoti_tube(playlist_link):
     myzip.close()
 
     print("Done")
-
-
-spoti_tube(linkk)

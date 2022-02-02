@@ -11,6 +11,7 @@ flask = "*"
 flask-restful = "*"
 zipfile36 = "*"
 gunicorn = "*"
+boto = "*"
 
 [dev-packages]
 
