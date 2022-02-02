@@ -7,10 +7,10 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from pytube.__init__ import YouTube
 from zipfile import ZipFile
 import unidecode
-import config
 
-cid = config.cid
-csecret = config.csecret
+
+cid = os.getenv('CID')
+csecret = os.getenv('CSECRET')
 client_credentials_manager = SpotifyClientCredentials(
     client_id=cid, client_secret=csecret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
