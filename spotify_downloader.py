@@ -8,8 +8,8 @@ from pytube.__init__ import YouTube
 from zipfile import ZipFile
 from boto.s3.connection import S3Connection
 
-cid = S3Connection(os.environ['cid'])
-csecret = S3Connection(os.environ['csecret'])
+cid = os.environ.get('cid')
+csecret = os.environ.get('csecret')
 client_credentials_manager = SpotifyClientCredentials(
     client_id=cid, client_secret=csecret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)

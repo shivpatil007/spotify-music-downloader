@@ -47,4 +47,4 @@ api.add_resource(download_file, '/download_file')
 # driver function
 if __name__ == '__main__':
 
-    app.run(debug=True)
+    app.run(debug=False,)
