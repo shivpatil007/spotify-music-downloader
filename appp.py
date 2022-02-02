@@ -1,5 +1,4 @@
-from email import message
-from flask import Flask, Response, jsonify, request, render_template, send_file
+from flask import Flask, Response,  request, render_template, send_file
 from flask_restful import Resource, Api
 import spotify_downloader
 import os
@@ -29,7 +28,7 @@ class Hello(Resource):
         return Response(response=render_template('index.html'), status=200, mimetype="text/html")
 
     def post(self):
-        data = request.form['to-dow-link']     # status code
+        data = request.form['to-dow-link']
         text = spotify_downloader.track_record(data)
         return Response(response=render_template('loading.html', message=text), status=200, mimetype="text/html")
 
