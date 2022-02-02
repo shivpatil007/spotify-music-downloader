@@ -1,3 +1,4 @@
+from email import message
 from flask import Flask, Response, jsonify, request, render_template, send_file
 from flask_restful import Resource, Api
 import spotify_downloader
@@ -29,22 +30,41 @@ class Hello(Resource):
 
     def post(self):
         data = request.form['to-dow-link']     # status code
-        songs_number = 4  # spotify_downloader.get_song_number(data)
-        spotify_downloader.spoti_tube(data)
-        return Response(response=render_template('download.html'), status=200, mimetype="text/html")
+        text = spotify_downloader.track_record(data)
+        return Response(response=render_template('loading.html', message=text), status=200, mimetype="text/html")
+
+
+class get_playlist_songs_no(Resource):
+
+    def get(self):
+
+        return {'songs_number': len(spotify_downloader.tracks)+1}
+
+
+class songgs_download(Resource):
+    def get(self):
+
+        print(len(spotify_downloader.tracks))
+        if not spotify_downloader.tracks:
+            return {'message': ''}
+        track_name = spotify_downloader.spoti_tube()
+        return {'message': track_name}
 
 
 class download_file(Resource):
 
     def get(self):
+        spotify_downloader.creating_zip()
         return send_file('plalylist.zip', as_attachment=True)
 
 
 api.add_resource(Hello, '/')
+api.add_resource(songgs_download, '/songgs_download')
+api.add_resource(get_playlist_songs_no, '/get_playlist_songs_no')
 api.add_resource(download_file, '/download_file')
 
 
 # driver function
 if __name__ == '__main__':
 
-    app.run(debug=False,)
+    app.run(debug=True,)

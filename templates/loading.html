@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles.css">
+    <title>Spotify Downloader</title>
+    <link rel="icon" type="image/x-icon" href="../static/images/favicon.ico">
+    <script type="text/javascript" src="../static/main.js"></script>
+</head>
+
+<body onload="call_songs()">
+    <div class="loading" id="load" style="display: block;">
+        <table>
+            <tr>
+                <td>
+                    <div class='image'>
+                        <img src="../static/images/XOsX.gif" alt="">
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <h4 class="wordCarousel">
+
+                            <div>
+                                <!-- Use classes 2,3, or 4 to match the number of words -->
+                                <ul class="flip4">
+                                    <li>Converting</li>
+                                    <li>Almost done..</li>
+                                    <li>Converting</li>
+                                    <li>Almost done..</li>
+                                </ul>
+                            </div>
+
+                        </h4>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <h4 id="track-name" style="font-weight:50;color: #eee;">
+                working on it...
+            </h4>
+        </div>
+        <div>
+            <h6>
+                *Converting the playlist may take a while depending on size of your playlist.
+            </h6>
+        </div>
+    </div>
+    <div class="loading" id="final-dow" style="display: none;">
+
+        <h4 class="wordCarousel">
+
+            <div>
+                <!-- Use classes 2,3, or 4 to match the number of words -->
+                <ul class="flip4">
+                    <li>Download Completed</li>
+                    <li>Enjoy</li>
+                    <li>Download Completed</li>
+                    <li>Enjoy</li>
+                </ul>
+            </div>
+
+        </h4>
+        <table>
+            <tr>
+                <td>
+                    <div class="download-file">
+                        <a href={{url_for('download_file')}}>
+                            <button class="btn">Download</button>
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <div class="download-file" style="right: 20px;">
+
+                        <button class="btn" onclick="location.href=window.location.origin">Back to home page</button>
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+
+
+
+    </div>
+</body>
+
+</html>

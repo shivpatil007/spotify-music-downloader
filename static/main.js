@@ -13,6 +13,36 @@ function open_load() {
     document.getElementById("load").style.display='block';
 }
 
+
+async function  call_songs() {
+    
+    await fetch('http://127.0.0.1:5000/get_playlist_songs_no')
+    .then(res => res.json())
+    .then(async out1 =>
+        {   
+            while(out1.songs_number--)
+            {
+              await  fetch('http://127.0.0.1:5000/songgs_download')
+                .then(res => res.json())
+                .then(out =>
+                    {  
+                         if (out.message!=""){
+                            document.getElementById("track-name").innerHTML = out.message;
+                        }
+                        else{
+                            document.getElementById("load").style.display='none';
+                            document.getElementById("final-dow").style.display='block';
+                        }
+                        
+                    }
+                    )
+                .catch(err => 'Something went wrong');
+            }
+
+        } )
+    .catch(err => 'Something went wrong');
+}
+
 function bgrchange(temp){
     if(temp==1) {
     document.getElementById("bgr").style.backgroundImage = "url(static/images/204161-spotify-wallpaper.png)";
