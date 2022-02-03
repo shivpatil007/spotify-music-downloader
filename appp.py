@@ -1,7 +1,6 @@
 
 import os
 import psycopg2
-import config
 from flask import Flask, Response,  request, render_template, send_file
 from flask_restful import Resource, Api
 import spotify_downloader
