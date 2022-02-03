@@ -34,16 +34,12 @@ class Hello(Resource):
 
 
 class get_playlist_songs_no(Resource):
-
     def get(self):
-
         return {'songs_number': len(spotify_downloader.tracks)+1}
 
 
 class songgs_download(Resource):
     def get(self):
-
-        print(len(spotify_downloader.tracks))
         if not spotify_downloader.tracks:
             return {'message': ''}
         track_name = spotify_downloader.spoti_tube()

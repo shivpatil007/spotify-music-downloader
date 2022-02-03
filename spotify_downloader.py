@@ -65,22 +65,20 @@ def spoti_tube():
     music_name = unidecode.unidecode(music_name)
     music_name = replacesomthing(music_name)
     print(music_name + str(len(tracks)))
-    try:
-        html = urllib.request.urlopen(
-            "https://www.youtube.com/results?search_query="+music_name)
-        video_uls = "https://www.youtube.com/watch?v=" + \
-            re.findall(r"watch\?v=(\S{11})", html.read().decode())[0]
-        yt = YouTube(video_uls)
-        video = yt.streams.filter(only_audio=True).first()
 
-        out_file = video.download(output_path=os.getcwd()+"/music")
+    html = urllib.request.urlopen(
+        "https://www.youtube.com/results?search_query="+music_name)
+    video_uls = "https://www.youtube.com/watch?v=" + \
+        re.findall(r"watch\?v=(\S{11})", html.read().decode())[0]
+    yt = YouTube(video_uls)
+    video = yt.streams.filter(only_audio=True).first()
 
-        base, ext = os.path.splitext(out_file)
-        new_file = base + '.mp3'
-        os.rename(out_file, new_file)
+    out_file = video.download(output_path=os.getcwd()+"/music")
 
-    except:
-        print("Error")
+    base, ext = os.path.splitext(out_file)
+    new_file = base + '.mp3'
+    os.rename(out_file, new_file)
+
     if tracks:
         tracks.pop(0)
     print("except done")
