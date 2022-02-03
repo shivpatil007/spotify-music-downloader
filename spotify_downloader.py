@@ -1,12 +1,10 @@
-import re
+
 import urllib.request
 import os
 import sys
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-from pytube.__init__ import YouTube
-from zipfile import ZipFile
-import unidecode
+import imp_functions
 
 
 cid = os.environ.get('cid')
@@ -14,7 +12,6 @@ csecret = os.environ.get('csecret')
 client_credentials_manager = SpotifyClientCredentials(
     client_id=cid, client_secret=csecret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-linkk = "https://open.spotify.com/playlist/37i9dQZF1EpR4uXT7fbqOP?si=bbbf8ce564cd4aff"
 
 
 def get_song_number(playlist_link):
@@ -24,72 +21,51 @@ def get_song_number(playlist_link):
     return song_number
 
 
-def replacesomthing(text):
-    a = {
-        'å': 'a',
-        'ä': 'a',
-        'ö': 'o',
-        'Ö': 'O',
-        'À': 'A',
-        'Á': 'A',
-        'Â': 'A',
-        'Ã': 'A',
-        'Ä': 'A',
-        'Å': 'A',
-        'Æ': 'A',
-    }
-
-    for i in a:
-        text = text.replace(i, a[i])
-    return text
-
-
-tracks = []
-plalist_songs_name = []
-
-
 def track_record(playlist_link):
+    import unidecode
+    tracks = []
     playlist_URI = playlist_link.split("/")[-1].split("?")[0]
     for track in sp.playlist_tracks(playlist_URI)["items"]:
-        tracks.append(track)
-    return 'Getting tracks from playlist'
+        music_name = "+".join((track["track"]["name"] + " " +
+                               sp.artist(track["track"]["artists"][0]["uri"])['name']).split(" "))
+        music_name = unidecode.unidecode(music_name)
+        music_name = imp_functions.replacesomthing(music_name)
+        tracks.append(music_name)
+    return tracks
 
 
-def spoti_tube():
-
-    track = tracks[0]
-
-    music_name = "+".join((track["track"]["name"] + " " +
-                           sp.artist(track["track"]["artists"][0]["uri"])['name']).split(" "))
-
-    music_name = unidecode.unidecode(music_name)
-    music_name = replacesomthing(music_name)
-    print(music_name + str(len(tracks)))
-
-    html = urllib.request.urlopen(
-        "https://www.youtube.com/results?search_query="+music_name)
-    video_uls = "https://www.youtube.com/watch?v=" + \
-        re.findall(r"watch\?v=(\S{11})", html.read().decode())[0]
-    yt = YouTube(video_uls)
-    video = yt.streams.filter(only_audio=True).first()
-
-    out_file = video.download(output_path=os.getcwd()+"/music")
-
-    base, ext = os.path.splitext(out_file)
-    new_file = base + '.mp3'
-    os.rename(out_file, new_file)
-
-    if tracks:
-        tracks.pop(0)
-    print("except done")
-    return 'currently <h4>"'+track["track"]["name"]+'"</h4> is being converted...'
+def spoti_tube(music_name, id):
+    from pytube.__init__ import YouTube
+    import re
+    print(music_name)
+    try:
+        html = urllib.request.urlopen(
+            "https://www.youtube.com/results?search_query="+music_name)
+        video_uls = "https://www.youtube.com/watch?v=" + \
+            re.findall(r"watch\?v=(\S{11})", html.read().decode())[0]
+        yt = YouTube(video_uls)
+        video = yt.streams.filter(only_audio=True).first()
+        out_file = video.download(output_path=os.getcwd()+"/music"+id)
+        base, ext = os.path.splitext(out_file)
+        new_file = base + '.mp3'
+        os.rename(out_file, new_file)
+    except:
+        print("except done")
+    music_name = music_name.replace("+", " ")
+    return 'currently <h4>"'+music_name+'"</h4> is being converted...'
 
 
-def creating_zip():
-    plalist_songs_name = os.listdir("music")
-    with ZipFile('plalylist.zip', 'w') as myzip:
-        for song in plalist_songs_name:
-            myzip.write('music/'+song)
-    myzip.close()
-    plalist_songs_name = []
+def creating_zip(id):
+    from zipfile import ZipFile
+    from threading import Thread
+    plalist_songs_name = os.listdir("music"+id)
+    try:
+        with ZipFile('playlist'+id+'.zip', 'w') as myzip:
+            for song in plalist_songs_name:
+                myzip.write('music'+id+'/'+song)
+        myzip.close()
+    except Exception as e:
+        print(e)
+
+    #Thread(target=imp_functions.deleting, args=(id,)).start()
     print("Done")

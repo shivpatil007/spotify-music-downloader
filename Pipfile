@@ -12,6 +12,7 @@ flask-restful = "*"
 zipfile36 = "*"
 gunicorn = "*"
 unidecode = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
