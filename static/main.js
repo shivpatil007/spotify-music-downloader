@@ -16,13 +16,13 @@ function open_load() {
 
 async function  call_songs() {
     
-    await fetch('http://127.0.0.1:5000/get_playlist_songs_no')
+    await fetch(window.location.origin+'/get_playlist_songs_no')
     .then(res => res.json())
     .then(async out1 =>
         {   
             while(out1.songs_number--)
             {
-              await  fetch('http://127.0.0.1:5000/songgs_download')
+              await  fetch(window.location.origin+'/songgs_download')
                 .then(res => res.json())
                 .then(out =>
                     {  
