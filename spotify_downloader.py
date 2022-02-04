@@ -5,7 +5,7 @@ import sys
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import imp_functions
-
+import unidecode
 
 cid = os.environ.get('cid')
 csecret = os.environ.get('csecret')
@@ -21,8 +21,18 @@ def get_song_number(playlist_link):
     return song_number
 
 
-def track_record(playlist_link):
-    import unidecode
+def single_track_download(track_link):
+    trac_URI = track_link.split("/")[-1].split("?")[0]
+    track = sp.track(trac_URI)
+    music_name = track["name"]+" " + \
+        sp.artist(track["artists"][0]["uri"])['name']
+    music_name = unidecode.unidecode(music_name)
+    music_name = imp_functions.replacesomthing(music_name)
+    return "+".join(music_name.split(" "))
+
+
+def spplaylist_track_record(playlist_link):
+
     tracks = []
     playlist_URI = playlist_link.split("/")[-1].split("?")[0]
     for track in sp.playlist_tracks(playlist_URI)["items"]:
@@ -34,7 +44,7 @@ def track_record(playlist_link):
     return tracks
 
 
-def spoti_tube(music_name, id):
+def youtube_part(music_name):
     from pytube.__init__ import YouTube
     import re
     print(music_name)
@@ -45,6 +55,17 @@ def spoti_tube(music_name, id):
             re.findall(r"watch\?v=(\S{11})", html.read().decode())[0]
         yt = YouTube(video_uls)
         video = yt.streams.filter(only_audio=True).first()
+
+    except Exception as e:
+        print(e)
+        print("No video found")
+        return False
+    return video
+
+
+def spoti_tube(music_name, id):
+    try:
+        video = youtube_part(music_name)
         out_file = video.download(output_path=os.getcwd()+"/music"+id)
         base, ext = os.path.splitext(out_file)
         new_file = base + '.mp3'
@@ -70,3 +91,7 @@ def creating_zip(id):
 
     #Thread(target=imp_functions.deleting, args=(id,)).start()
     print("Done")
+
+
+link = 'https://open.spotify.com/track/7rglLriMNBPAyuJOMGwi39?si=85a0cb5821074532'
+single_track_download(link)

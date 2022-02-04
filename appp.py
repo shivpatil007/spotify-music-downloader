@@ -1,25 +1,11 @@
-
-import os
-import psycopg2
+import db_connection
 from flask import Flask, Response,  request, render_template, send_file
 from flask_restful import Resource, Api
 import spotify_downloader
-import threading
 import imp_functions
-import urllib.parse
+
 app = Flask(__name__)
-
 api = Api(app)
-result = urllib.parse.urlparse(os.environ.get('DATABASE_URL'))
-
-conn = psycopg2.connect(
-    host=result.hostname,
-    database=result.path[1:],
-    user=result.username,
-    password=result.password
-
-)
-cursor = conn.cursor()
 
 
 class Hello(Resource):
@@ -29,31 +15,18 @@ class Hello(Resource):
 
     def post(self):
         data = request.form['to-dow-link']
-        tracks = spotify_downloader.track_record(data)
-        unique = imp_functions.random_string(5)
-        cursor.execute(
-            "INSERT INTO songs_name (folder,songs) VALUES (%s,%s)", (unique, tracks))
-        conn.commit()
-        cursor.execute(
-            "SELECT id FROM songs_name WHERE folder = %s", (unique,))
-        id = cursor.fetchone()[0]
-        print(id)
-        threading.Thread(target=imp_functions.create_directory,
-                         args=([id])).start()
-        threading.Thread(target=imp_functions.deleting,
-                         args=([id-1])).start()
+        info = imp_functions.analyse_link_of_spotify_or_youtube(data)
+        if info == 'sp-playlist':
+            tracks = spotify_downloader.spplaylist_track_record(data)
+        elif info == 'sp-track':
+            tracks = [spotify_downloader.single_track_download(data)]
+        id = db_connection.db_insertion(tracks)
         return Response(response=render_template('loading.html', id=id), status=200, mimetype="text/html")
 
 
 class get_playlist_songs_no(Resource):
     def post(self):
-        data = request.json
-        id = data['id']
-        print('get_playlist_songs_no->'+str(data))
-        cursor.execute(
-            "SELECT songs FROM songs_name WHERE id = %s", (id,))
-        tracks = cursor.fetchall()[0][0][1:-1].split(',')
-        return {'songs_number': len(tracks)+1}
+        return {'songs_number': len(db_connection.tracks_from_db(request.json['id']))+1}
 
 
 class songgs_download(Resource):
@@ -61,15 +34,9 @@ class songgs_download(Resource):
         data = request.json
         id = data['id']
         song_no = data['song_no']
-
-        print('songgs_download->id='+str(id))
-        print('songgs_download->'+str(song_no))
         if song_no == 1:
             return {'message': ''}
-        cursor.execute(
-            "SELECT songs FROM songs_name WHERE id = %s", (id,))
-        track = cursor.fetchall()[0][0][1:-1].split(',')[song_no-2]
-
+        track = db_connection.song_name_retrevial(id, song_no)
         track_name = spotify_downloader.spoti_tube(track, str(id))
         return {'message': track_name}
 

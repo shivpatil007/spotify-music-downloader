@@ -51,3 +51,27 @@ def replacesomthing(text):
     for i in a:
         text = text.replace(i, a[i])
     return text
+
+
+def analayse_type_of_link_of_spotify(link):
+    import re
+    if re.search('playlist', link):
+        return 'sp-playlist'
+    elif re.search('track', link):
+        return 'sp-track'
+    elif re.search('album', link):
+        return 'sp-album'
+    elif re.search('artist', link):
+        return 'sp-artist'
+    else:
+        return 'error'
+
+
+def analyse_link_of_spotify_or_youtube(link):
+    import re
+    if re.search('spotify', link):
+        return analayse_type_of_link_of_spotify(link)
+    elif re.search('youtube', link) or re.search('youtu.be', link):
+        return 'youtube'
+    else:
+        return 'error'
