@@ -58,11 +58,12 @@ def spoti_tube(music_name, id):
 def creating_zip(id):
     from zipfile import ZipFile
     from threading import Thread
+    id = str(id)
     plalist_songs_name = os.listdir("music"+id)
     try:
         with ZipFile('playlist'+id+'.zip', 'w') as myzip:
             for song in plalist_songs_name:
-                myzip.write('music'+id+'/'+song)
+                myzip.write(os.getcwd()+"/music"+id + '/'+song)
         myzip.close()
     except Exception as e:
         print(e)
