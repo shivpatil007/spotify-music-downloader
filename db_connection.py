@@ -6,11 +6,10 @@ import urllib.parse
 import os
 result = urllib.parse.urlparse(os.environ.get('DATABASE_URL'))
 conn = psycopg2.connect(
-    host=result.host,
-    database=result.database,
-    user=result.user,
+    host=result.hostname,
+    database=result.path[1:],
+    user=result.username,
     password=result.password
-
 )
 cursor = conn.cursor()
 
