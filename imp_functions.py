@@ -15,6 +15,9 @@ def deleting(id):
 
         if os.path.exists('music'+id):
             os.rmdir('music'+id)
+    except Exception as e:
+        print(e)
+    try:
         if os.path.exists('playlist'+id+'.zip'):
 
             os.remove('playlist'+id+'.zip')
@@ -25,8 +28,8 @@ def deleting(id):
 def create_directory(id):
     import os
     id = str(id)
-    if not os.path.exists('music/'+id):
-        os.makedirs('music/'+id)
+    if not os.path.exists('music'+id):
+        os.makedirs('music'+id)
 
 
 def replacesomthing(text):

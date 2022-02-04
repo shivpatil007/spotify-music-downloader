@@ -6,9 +6,9 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import imp_functions
 
-
-cid = os.environ.get('cid')
-csecret = os.environ.get('csecret')
+import config
+cid = config.cid
+csecret = config.csecret
 client_credentials_manager = SpotifyClientCredentials(
     client_id=cid, client_secret=csecret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
@@ -49,8 +49,8 @@ def spoti_tube(music_name, id):
         base, ext = os.path.splitext(out_file)
         new_file = base + '.mp3'
         os.rename(out_file, new_file)
-    except:
-        print("except done")
+    except Exception as e:
+        print(e)
     music_name = music_name.replace("+", " ")
     return 'currently <h4>"'+music_name+'"</h4> is being converted...'
 

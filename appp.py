@@ -1,4 +1,5 @@
 
+import config
 import os
 import psycopg2
 from flask import Flask, Response,  request, render_template, send_file
@@ -10,15 +11,10 @@ import urllib.parse
 app = Flask(__name__)
 
 api = Api(app)
-result = urllib.parse.urlparse(os.environ.get('DATABASE_URL'))
-
+#result = urllib.parse.urlparse(os.environ.get('DATABASE_URL'))
 conn = psycopg2.connect(
-    host=result.hostname,
-    database=result.path[1:],
-    user=result.username,
-    password=result.password
+    host=config.host, database=config.database, user=config.user, password=config.password)
 
-)
 cursor = conn.cursor()
 
 
