@@ -14,10 +14,10 @@
 <body id="bgr">
     <div id="main-page" style="display: 'block';">
         <ul class="menu-bar">
-            <li type="button" onclick="splist('block','none','none','none');bgrchange(1);">Spotify playlist</li>
-            <li type="button" onclick="splist('none','block','none','none');bgrchange(1);">Spotify song</li>
-            <li type="button" onclick="splist('none','none','block','none');bgrchange(2);">Youtube playlist</li>
-            <li type="button" onclick="splist('none','none','none','block');bgrchange(2);">Youtube vedio</li>
+            <li type="button" onclick="splist(1);bgrchange(1);">Spotify playlist</li>
+            <li type="button" onclick="splist(2);bgrchange(1);">Spotify song</li>
+            <li type="button" onclick="splist(3);bgrchange(2);">Spotify Artist</li>
+            <li type="button" onclick="splist(4);bgrchange(2);">Youtube vedio</li>
 
         </ul>
 
@@ -27,9 +27,6 @@
                 <div class="inputBox">
                     <input type="url" name="to-dow-link" required="">
                     <label for="" id="sp-list" style="display:block">Spotify Playlist Url</label>
-                    <label for="" id="sp-song" style="display:none">Spotify Song Url</label>
-                    <label for="" id="yt-list" style="display:none">Youtube Playlist Url</label>
-                    <label for="" id="yt-song" style="display:none">Youtube Song Url</label>
                 </div>
                 <input type="submit" name="" value="Submit">
 

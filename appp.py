@@ -1,3 +1,4 @@
+import os
 import db_connection
 from flask import Flask, Response,  request, render_template, send_file
 from flask_restful import Resource, Api
@@ -20,6 +21,8 @@ class Hello(Resource):
             tracks = spotify_downloader.spplaylist_track_record(data)
         elif info == 'sp-track':
             tracks = [spotify_downloader.single_track_download(data)]
+        elif info == 'sp-artist':
+            tracks = spotify_downloader.artist_top_tracks(data)
         id = db_connection.db_insertion(tracks)
         return Response(response=render_template('loading.html', id=id), status=200, mimetype="text/html")
 
@@ -46,7 +49,10 @@ class download_file(Resource):
     def get(self):
         data = request.args.get('id')
         id = str(data)
-        spotify_downloader.creating_zip(id)
+        plalist_songs_name = os.listdir("music"+id)
+        if len(plalist_songs_name) <= 1:
+            return send_file('music'+id+'/'+plalist_songs_name[0], as_attachment=True)
+        spotify_downloader.creating_zip(id, plalist_songs_name)
         return send_file('playlist'+id+'.zip', as_attachment=True)
 
 

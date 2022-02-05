@@ -1,11 +1,16 @@
-function splist(t1,t2,t3,t4) {
-  
-    document.getElementById("sp-list").style.display=t1;
-    document.getElementById("sp-song").style.display=t2;
-    document.getElementById("yt-list").style.display=t3;
-    document.getElementById("yt-song").style.display=t4;
-
-
+function splist(i) {
+    if (i==1) {
+    document.getElementById("sp-list").innerText="Spotify Playlist Url";
+    }
+    if (i==2) {
+    document.getElementById("sp-list").innerText="Spotify Song Url";
+    }
+    if (i==3) {
+    document.getElementById("sp-list").innerText="Spotify Artist Url";
+    }
+    if(i==4) {
+    document.getElementById("sp-list").innerText="Spotify Album Url";
+    }
 }
 
 function open_load() {

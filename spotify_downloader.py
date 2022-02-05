@@ -7,8 +7,9 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import imp_functions
 import unidecode
 
-cid = os.environ.get('cid')
-csecret = os.environ.get('csecret')
+import config
+cid = config.cid
+csecret = config.csecret
 client_credentials_manager = SpotifyClientCredentials(
     client_id=cid, client_secret=csecret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
@@ -21,9 +22,7 @@ def get_song_number(playlist_link):
     return song_number
 
 
-def single_track_download(track_link):
-    trac_URI = track_link.split("/")[-1].split("?")[0]
-    track = sp.track(trac_URI)
+def music_name_extractor(track):
     music_name = track["name"]+" " + \
         sp.artist(track["artists"][0]["uri"])['name']
     music_name = unidecode.unidecode(music_name)
@@ -31,10 +30,22 @@ def single_track_download(track_link):
     return "+".join(music_name.split(" "))
 
 
-def spplaylist_track_record(playlist_link):
+def link_extractor(link):
+    link = link.split("/")[-1].split("?")[0]
+    return link
 
+
+def single_track_download(track_link):
+    return music_name_extractor(sp.track(link_extractor(track_link)))
+
+
+def artist_top_tracks(link):
+    return [music_name_extractor(track) for track in sp.artist_top_tracks(link_extractor(link))["tracks"]]
+
+
+def spplaylist_track_record(playlist_link):
     tracks = []
-    playlist_URI = playlist_link.split("/")[-1].split("?")[0]
+    playlist_URI = link_extractor(playlist_link)
     for track in sp.playlist_tracks(playlist_URI)["items"]:
         music_name = "+".join((track["track"]["name"] + " " +
                                sp.artist(track["track"]["artists"][0]["uri"])['name']).split(" "))
@@ -76,11 +87,9 @@ def spoti_tube(music_name, id):
     return 'currently <h4>"'+music_name+'"</h4> is being converted...'
 
 
-def creating_zip(id):
+def creating_zip(id, plalist_songs_name):
     from zipfile import ZipFile
-    from threading import Thread
     id = str(id)
-    plalist_songs_name = os.listdir("music"+id)
     try:
         with ZipFile('playlist'+id+'.zip', 'w') as myzip:
             for song in plalist_songs_name:
@@ -88,10 +97,8 @@ def creating_zip(id):
         myzip.close()
     except Exception as e:
         print(e)
-
-    #Thread(target=imp_functions.deleting, args=(id,)).start()
     print("Done")
 
 
-link = 'https://open.spotify.com/track/7rglLriMNBPAyuJOMGwi39?si=85a0cb5821074532'
-single_track_download(link)
+link = 'https://open.spotify.com/track/02MWAaffLxlfxAUY7c5dvx?si=6e82218f6fd94357'
+print(single_track_download(link))
