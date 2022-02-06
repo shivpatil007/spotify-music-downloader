@@ -29,8 +29,7 @@ if(temp==2) {
 }
 }
 
-async function aTestFunction() {
-    id
+async function aTestFunction(id) {
     await fetch(
         window.location.origin + '/get_playlist_songs_no', {
         method: 'POST',
@@ -71,3 +70,11 @@ async function aTestFunction() {
     // The image is ready!
 }
 
+function check_form_link(){
+    var form = new FormData(document.getElementById("form"));
+    var inputValue = form.get("to-dow-link");
+    if(!inputValue.includes("https://open.spotify.com")){
+        alert("Please enter a valid Spotify link");
+        return false;
+    }
+}
