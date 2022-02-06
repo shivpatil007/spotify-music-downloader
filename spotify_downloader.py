@@ -1,4 +1,5 @@
 
+import json
 import urllib.request
 import os
 import sys
@@ -44,15 +45,7 @@ def artist_top_tracks(link):
 
 
 def spplaylist_track_record(playlist_link):
-    tracks = []
-    playlist_URI = link_extractor(playlist_link)
-    for track in sp.playlist_tracks(playlist_URI)["items"]:
-        music_name = "+".join((track["track"]["name"] + " " +
-                               sp.artist(track["track"]["artists"][0]["uri"])['name']).split(" "))
-        music_name = unidecode.unidecode(music_name)
-        music_name = imp_functions.replacesomthing(music_name)
-        tracks.append(music_name)
-    return tracks
+    return [music_name_extractor(i["track"]) for i in sp.playlist_tracks(link_extractor(playlist_link))["items"]]
 
 
 def youtube_part(music_name):
@@ -98,7 +91,3 @@ def creating_zip(id, plalist_songs_name):
     except Exception as e:
         print(e)
     print("Done")
-
-
-link = 'https://open.spotify.com/track/02MWAaffLxlfxAUY7c5dvx?si=6e82218f6fd94357'
-print(single_track_download(link))
