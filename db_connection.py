@@ -4,8 +4,8 @@ import imp_functions
 import psycopg2
 import urllib.parse
 import os
-#result = urllib.parse.urlparse(os.environ.get('DATABASE_URL'))
-import config as result
+result = urllib.parse.urlparse(os.environ.get('DATABASE_URL'))
+
 conn = psycopg2.connect(
     host=result.hostname,
     database=result.path[1:],

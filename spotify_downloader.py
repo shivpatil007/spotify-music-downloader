@@ -7,9 +7,9 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import imp_functions
 import unidecode
 
-import config
-cid = config.cid
-csecret = config.csecret
+
+cid = os.environ.get('cid')
+csecret = os.environ.get('csecret')
 client_credentials_manager = SpotifyClientCredentials(
     client_id=cid, client_secret=csecret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
