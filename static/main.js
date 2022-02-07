@@ -21,6 +21,7 @@ function open_load() {
 
 
 function bgrchange(temp){
+    temp=parseInt(temp);
     if(temp==1) {
     document.getElementById("bgr").style.backgroundImage = "url(static/images/204161-spotify-wallpaper.png)";
 }
@@ -77,4 +78,16 @@ function check_form_link(){
         alert("Please enter a valid Spotify link");
         return false;
     }
+}
+
+function isMobile(){
+    if(window.innerWidth<=600){
+        document.getElementById("for-pc").style.display="none";
+        document.getElementById("for-mob").style.display="block";
+    }
+    else{
+        document.getElementById("for-pc").style.display="block";
+        document.getElementById("for-mob").style.display="none";
+    }
+    
 }

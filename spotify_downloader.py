@@ -48,6 +48,10 @@ def spplaylist_track_record(playlist_link):
     return [music_name_extractor(i["track"]) for i in sp.playlist_tracks(link_extractor(playlist_link))["items"]]
 
 
+def get_album_tracks(album_link):
+    return [music_name_extractor(track) for track in sp.album_tracks(link_extractor(album_link))["items"]]
+
+
 def youtube_part(music_name):
     from pytube.__init__ import YouTube
     import re

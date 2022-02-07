@@ -12,7 +12,7 @@ api = Api(app)
 class Hello(Resource):
 
     def get(self):
-        return Response(response=render_template('index.html'), status=200, mimetype="text/html")
+        return Response(response=render_template('first.html'), status=200, mimetype="text/html")
 
     def post(self):
         data = request.form['to-dow-link']
@@ -23,8 +23,22 @@ class Hello(Resource):
             tracks = [spotify_downloader.single_track_download(data)]
         elif info == 'sp-artist':
             tracks = spotify_downloader.artist_top_tracks(data)
+        elif info == 'sp-album':
+            tracks = spotify_downloader.get_album_tracks(data)
         id = db_connection.db_insertion(tracks)
         return Response(response=render_template('loading.html', id=id), status=200, mimetype="text/html")
+
+
+class spotify(Resource):
+
+    def get(self):
+        return Response(response=render_template('index.html', mode=1), status=200, mimetype="text/html")
+
+
+class youtube(Resource):
+
+    def get(self):
+        return Response(response=render_template('index.html', mode=2), status=200, mimetype="text/html")
 
 
 class get_playlist_songs_no(Resource):
@@ -57,6 +71,8 @@ class download_file(Resource):
 
 
 api.add_resource(Hello, '/')
+api.add_resource(spotify, '/spotify')
+api.add_resource(youtube, '/youtube')
 api.add_resource(songgs_download, '/songgs_download')
 api.add_resource(get_playlist_songs_no, '/get_playlist_songs_no')
 api.add_resource(download_file, '/download_file')
