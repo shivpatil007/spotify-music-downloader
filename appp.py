@@ -14,6 +14,12 @@ class Hello(Resource):
     def get(self):
         return Response(response=render_template('first.html'), status=200, mimetype="text/html")
 
+
+class spotify(Resource):
+
+    def get(self):
+        return Response(response=render_template('index.html', mode=1), status=200, mimetype="text/html")
+
     def post(self):
         data = request.form['to-dow-link']
         info = imp_functions.analyse_link_of_spotify_or_youtube(data)
@@ -27,12 +33,6 @@ class Hello(Resource):
             tracks = spotify_downloader.get_album_tracks(data)
         id = db_connection.db_insertion(tracks)
         return Response(response=render_template('loading.html', id=id), status=200, mimetype="text/html")
-
-
-class spotify(Resource):
-
-    def get(self):
-        return Response(response=render_template('index.html', mode=1), status=200, mimetype="text/html")
 
 
 class youtube(Resource):

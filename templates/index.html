@@ -2,22 +2,32 @@
 
 {% block body %}
 <div id="main-page" style="display: 'block';">
-    <ul class="menu-bar" id="for-pc" style="display: block;">
-        <div style="display: inline-flex;">
-            <li type="button" onclick="splist(1);">Spotify playlist</li>
-            <li type="button" onclick="splist(2);">Spotify song</li>
-            <li type="button" onclick="splist(3);">Spotify Artist</li>
-            <li type="button" onclick="splist(4);">Spotify Albums</li>
-        </div>
-    </ul>
-    <ul class="menu-bar" id="for-mob" style="display: none;">
-        <div style="display: inline-flex;">
-            <li type="button" onclick="splist(1);">Spotify playlist</li>
-            <li type="button" onclick="splist(2);">Spotify song</li>
-            <li type="button" onclick="splist(3);">Spotify Artist</li>
-            <li type="button" onclick="splist(4);">Spotify Albums</li>
-        </div>
-    </ul>
+    <div class="for-pc">
+        <ul class="menu-bar">
+
+            <div style="display: inline-flex;">
+                <li type="button" onclick="splist(1);">Spotify playlist</li>
+                <li type="button" onclick="splist(2);">Spotify song</li>
+                <li type="button" onclick="splist(3);">Spotify Artist</li>
+                <li type="button" onclick="splist(4);">Spotify Albums</li>
+            </div>
+        </ul>
+    </div>
+    <div class="for-mob">
+        <ul class="menu-bar">
+
+            <div style="display: inline-flex;">
+                <li type="button" onclick="splist(1);">Spotify playlist</li>
+                <li type="button" onclick="splist(2);">Spotify song</li>
+            </div>
+        </ul>
+        <ul class="menu-bar">
+            <div style="display: inline-flex;">
+                <li type="button" onclick="splist(3);">Spotify Artist</li>
+                <li type="button" onclick="splist(4);">Spotify Albums</li>
+            </div>
+        </ul>
+    </div>
 
     <div class="box">
 
@@ -37,7 +47,7 @@
     window.onload = function () {
 
         bgrchange("{{ mode }}");
-        isMobile();
+
     };
 </script>
 
