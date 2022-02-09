@@ -1,4 +1,5 @@
 
+import glob
 import json
 import urllib.request
 import os
@@ -52,34 +53,31 @@ def get_album_tracks(album_link):
     return [music_name_extractor(track) for track in sp.album_tracks(link_extractor(album_link))["items"]]
 
 
-def youtube_part(music_name):
+def youtube_part(vedio_id, id):
     from pytube.__init__ import YouTube
-    import re
-    print(music_name)
     try:
-        html = urllib.request.urlopen(
-            "https://www.youtube.com/results?search_query="+music_name)
-        video_uls = "https://www.youtube.com/watch?v=" + \
-            re.findall(r"watch\?v=(\S{11})", html.read().decode())[0]
-        yt = YouTube(video_uls)
-        video = yt.streams.filter(only_audio=True).first()
 
+        video_uls = "https://www.youtube.com/watch?v=" + vedio_id
+        yt = YouTube(video_uls)
+        video = yt.streams.filter(only_audio=True).first().download(
+            output_path=os.getcwd()+"/music"+id)
+        base, ext = os.path.splitext(video)
+        new_file = base + '.mp3'
+        os.rename(video, new_file)
+        return 'currently <h4>"'+yt.title+'"</h4> is being converted...'
     except Exception as e:
         print(e)
-        print("No video found")
-        return False
-    return video
 
 
 def spoti_tube(music_name, id):
+    import re
     try:
-        video = youtube_part(music_name)
-        out_file = video.download(output_path=os.getcwd()+"/music"+id)
-        base, ext = os.path.splitext(out_file)
-        new_file = base + '.mp3'
-        os.rename(out_file, new_file)
-    except:
-        print("except done")
+        html = urllib.request.urlopen(
+            "https://www.youtube.com/results?search_query="+music_name)
+        vedio_id = re.findall(r"watch\?v=(\S{11})", html.read().decode())[0]
+        youtube_part(vedio_id, id)
+    except Exception as e:
+        print(e)
     music_name = music_name.replace("+", " ")
     return 'currently <h4>"'+music_name+'"</h4> is being converted...'
 
@@ -95,3 +93,24 @@ def creating_zip(id, plalist_songs_name):
     except Exception as e:
         print(e)
     print("Done")
+
+
+def main_spotify_downloder(data):
+    info = imp_functions.analyse_link_of_spotify_or_youtube(data)
+    if info == 'sp-playlist':
+        tracks = spplaylist_track_record(data)
+    elif info == 'sp-track':
+        tracks = [single_track_download(data)]
+    elif info == 'sp-artist':
+        tracks = artist_top_tracks(data)
+    elif info == 'sp-album':
+        tracks = get_album_tracks(data)
+    return tracks
+
+
+def yt_playlist(data):
+    from pytube.__init__ import Playlist
+    try:
+        return [i.split("=")[-1] for i in Playlist(data)]
+    except Exception as e:
+        print(e)

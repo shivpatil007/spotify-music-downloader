@@ -1,15 +1,33 @@
 function splist(i) {
-    if (i==1) {
-    document.getElementById("sp-list").innerText="Spotify Playlist Url";
+    var x = (document.getElementById("playlist").textContent).split(" ")[0];
+    if (x == "Spotify") {
+        if (i==1) {
+        document.getElementById("sp-list").innerText="Spotify Playlist Url";
+        }
+        if (i==2) {
+        document.getElementById("sp-list").innerText="Spotify Song Url";
+        }
+        if (i==3) {
+        document.getElementById("sp-list").innerText="Spotify Artist Url";
+        }
+        if(i==4) {
+        document.getElementById("sp-list").innerText="Spotify Album Url";
+        }
+
     }
-    if (i==2) {
-    document.getElementById("sp-list").innerText="Spotify Song Url";
-    }
-    if (i==3) {
-    document.getElementById("sp-list").innerText="Spotify Artist Url";
-    }
-    if(i==4) {
-    document.getElementById("sp-list").innerText="Spotify Album Url";
+    else {
+        if (i==1) {
+            document.getElementById("sp-list").innerText="Youtube Playlist Url";
+            }
+            if (i==2) {
+            document.getElementById("sp-list").innerText="Youtube Song Url";
+            }
+            if (i==3) {
+            document.getElementById("sp-list").innerText="Youtube Artist Url";
+            }
+            if(i==4) {
+            document.getElementById("sp-list").innerText="Youtube Album Url";
+            }
     }
 }
 
@@ -27,10 +45,22 @@ function bgrchange(temp){
 }
 if(temp==2) {
     document.getElementById("bgr").style.backgroundImage = "url(static/images/wallpaper2you_31485.jpg)";
+    document.getElementById("playlist").innerText="Youtube Playlist";
+    document.getElementById("track").innerText="Youtube Song";
+    document.getElementById("artist").innerText="Youtube Channel";
+    document.getElementById("albums").innerText="Youtube Playlist";
+    splist(1);
+
 }
 }
 
-async function aTestFunction(id) {
+async function aTestFunction(id,typee) {
+    if (typee=='spotify') {
+        url='/songgs_download';
+    }
+    else {
+        url='/songgs_download_yt';
+    }
     await fetch(
         window.location.origin + '/get_playlist_songs_no', {
         method: 'POST',
@@ -43,7 +73,7 @@ async function aTestFunction(id) {
         .then(res => res.json())
         .then(async out1 => {
             while (out1.songs_number--) {
-                await fetch(window.location.origin + '/songgs_download', {
+                await fetch(window.location.origin + url, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -74,9 +104,8 @@ async function aTestFunction(id) {
 function check_form_link(){
     var form = new FormData(document.getElementById("form"));
     var inputValue = form.get("to-dow-link");
-    if(!inputValue.includes("https://open.spotify.com")){
-        alert("Please enter a valid Spotify link");
-        return false;
+    if(inputValue.includes("https://open.spotify.com") || inputValue.includes("https://www.youtube.com")){
+        
     }
 }
 

@@ -67,11 +67,21 @@ def analayse_type_of_link_of_spotify(link):
         return 'error'
 
 
+def analayse_type_of_link_of_youtube(link):
+    import re
+    if re.search('&list', link):
+        return 'yt-playlist'
+    elif re.search('watch?v=', link):
+        return 'yt-track'
+    else:
+        return 'error'
+
+
 def analyse_link_of_spotify_or_youtube(link):
     import re
     if re.search('spotify', link):
         return analayse_type_of_link_of_spotify(link)
     elif re.search('youtube', link) or re.search('youtu.be', link):
-        return 'youtube'
+        return analayse_type_of_link_of_youtube(link)
     else:
         return 'error'

@@ -290,7 +290,7 @@ def get_throttling_function_code(js: str) -> str:
         The name of the function used to compute the throttling parameter.
     """
     # Begin by extracting the correct function name
-    name = 'hha'
+    name = 'sha'
 
     # Identify where the function is defined
     pattern_start = r"%s=function\(\w\)" % name
@@ -298,7 +298,8 @@ def get_throttling_function_code(js: str) -> str:
     match = regex.search(js)
 
     # Extract the code within curly braces for the function itself, and merge any split lines
-    code_lines_list = find_object_from_startpoint(js, match.span()[1]).split('\n')
+    code_lines_list = find_object_from_startpoint(
+        js, match.span()[1]).split('\n')
     joined_lines = "".join(code_lines_list)
 
     # Prepend function definition (e.g. `Dea=function(a)`)
@@ -345,7 +346,8 @@ def get_throttling_function_array(js: str) -> List[Any]:
                 (r"{for\(\w=\(\w%\w\.length\+\w\.length\)%\w\.length;\w--;\)\w\.unshift\(\w.pop\(\)\)}", throttling_unshift),  # noqa:E501
                 (r"{\w\.reverse\(\)}", throttling_reverse),
                 (r"{\w\.push\(\w\)}", throttling_push),
-                (r";var\s\w=\w\[0\];\w\[0\]=\w\[\w\];\w\[\w\]=\w}", throttling_swap),
+                (r";var\s\w=\w\[0\];\w\[0\]=\w\[\w\];\w\[\w\]=\w}",
+                 throttling_swap),
                 (r"case\s\d+", throttling_cipher_function),
                 (r"\w\.splice\(0,1,\w\.splice\(\w,1,\w\[0\]\)\[0\]\)", throttling_nested_splice),  # noqa:E501
                 (r";\w\.splice\(\w,1\)}", js_splice),
@@ -390,7 +392,8 @@ def get_throttling_plan(js: str):
     plan_regex = re.compile(transform_start)
     match = plan_regex.search(raw_code)
 
-    transform_plan_raw = find_object_from_startpoint(raw_code, match.span()[1] - 1)
+    transform_plan_raw = find_object_from_startpoint(
+        raw_code, match.span()[1] - 1)
 
     # Steps are either c[x](c[y]) or c[x](c[y],c[z])
     step_start = r"c\[(\d+)\]\(c\[(\d+)\](,c(\[(\d+)\]))?\)"
@@ -399,9 +402,9 @@ def get_throttling_plan(js: str):
     transform_steps = []
     for match in matches:
         if match[4] != '':
-            transform_steps.append((match[0],match[1],match[4]))
+            transform_steps.append((match[0], match[1], match[4]))
         else:
-            transform_steps.append((match[0],match[1]))
+            transform_steps.append((match[0], match[1]))
 
     return transform_steps
 
@@ -458,7 +461,7 @@ def swap(arr: List, b: int):
     [3, 2, 1, 4]
     """
     r = b % len(arr)
-    return list(chain([arr[r]], arr[1:r], [arr[0]], arr[r + 1 :]))
+    return list(chain([arr[r]], arr[1:r], [arr[0]], arr[r + 1:]))
 
 
 def throttling_reverse(arr: list):

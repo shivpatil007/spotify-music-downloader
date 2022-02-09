@@ -22,23 +22,25 @@ class spotify(Resource):
 
     def post(self):
         data = request.form['to-dow-link']
-        info = imp_functions.analyse_link_of_spotify_or_youtube(data)
-        if info == 'sp-playlist':
-            tracks = spotify_downloader.spplaylist_track_record(data)
-        elif info == 'sp-track':
-            tracks = [spotify_downloader.single_track_download(data)]
-        elif info == 'sp-artist':
-            tracks = spotify_downloader.artist_top_tracks(data)
-        elif info == 'sp-album':
-            tracks = spotify_downloader.get_album_tracks(data)
-        id = db_connection.db_insertion(tracks)
-        return Response(response=render_template('loading.html', id=id), status=200, mimetype="text/html")
+        id, typee = db_connection.db_insertion(
+            spotify_downloader.main_spotify_downloder(data), 'spotify')
+        return Response(response=render_template('loading.html', id=id, type=typee), status=200, mimetype="text/html")
 
 
 class youtube(Resource):
 
     def get(self):
         return Response(response=render_template('index.html', mode=2), status=200, mimetype="text/html")
+
+    def post(self):
+        data = request.form['to-dow-link']
+        info = imp_functions.analyse_link_of_spotify_or_youtube(data)
+        if info == 'yt-playlist':
+            tracks = spotify_downloader.yt_playlist(data)
+        elif info == 'yt-track':
+            tracks = [spotify_downloader.single_track_download(data)]
+        id, typee = db_connection.db_insertion(tracks, 'youtube')
+        return Response(response=render_template('loading.html', id=id, type=typee), status=200, mimetype="text/html")
 
 
 class get_playlist_songs_no(Resource):
@@ -58,6 +60,18 @@ class songgs_download(Resource):
         return {'message': track_name}
 
 
+class songgs_download_yt(Resource):
+    def post(self):
+        data = request.json
+        id = data['id']
+        song_no = data['song_no']
+        if song_no == 1:
+            return {'message': ''}
+        track = db_connection.song_name_retrevial(id, song_no)
+        track_name = spotify_downloader.youtube_part(track, str(id))
+        return {'message': track_name}
+
+
 class download_file(Resource):
 
     def get(self):
@@ -74,6 +88,7 @@ api.add_resource(Hello, '/')
 api.add_resource(spotify, '/spotify')
 api.add_resource(youtube, '/youtube')
 api.add_resource(songgs_download, '/songgs_download')
+api.add_resource(songgs_download_yt, '/songgs_download_yt')
 api.add_resource(get_playlist_songs_no, '/get_playlist_songs_no')
 api.add_resource(download_file, '/download_file')
 

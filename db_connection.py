@@ -15,10 +15,10 @@ conn = psycopg2.connect(
 cursor = conn.cursor()
 
 
-def db_insertion(tracks):
+def db_insertion(tracks, typee):
     unique = imp_functions.random_string(5)
     cursor.execute(
-        "INSERT INTO songs_name (folder,songs) VALUES (%s,%s)", (unique, tracks))
+        "INSERT INTO songs_name (folder,songs,web_type) VALUES (%s,%s,%s)", (unique, tracks, typee))
     conn.commit()
     cursor.execute(
         "SELECT id FROM songs_name WHERE folder = %s", (unique,))
@@ -27,16 +27,23 @@ def db_insertion(tracks):
                      args=([id])).start()
     threading.Thread(target=imp_functions.deleting,
                      args=([id-1])).start()
-    return id
+    return id, typee
 
 
 def tracks_from_db(id):
+    print(id)
     cursor.execute(
-        "SELECT songs FROM songs_name WHERE id = %s", (id,))
-    return cursor.fetchall()[0][0][1:-1].split(',')
+        "SELECT songs,web_type FROM songs_name WHERE id = %s", (id,))
+    x = cursor.fetchone()
+    if x[1] == 'youtube':
+        return x[0][1:-1].split(',')
+    return x[0][1:-1].split(',')
 
 
 def song_name_retrevial(id, song_no):
     cursor.execute(
-        "SELECT songs FROM songs_name WHERE id = %s", (id,))
-    return cursor.fetchall()[0][0][1:-1].split(',')[song_no-2]
+        "SELECT songs,web_type FROM songs_name WHERE id = %s", (id,))
+    x = cursor.fetchone()
+    if x[1] == 'youtube':
+        return x[0][1:-1].split(',')[song_no-2]
+    return x[0][1:-1].split(',')[song_no-2]

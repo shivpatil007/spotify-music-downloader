@@ -13,6 +13,7 @@ zipfile36 = "*"
 gunicorn = "*"
 unidecode = "*"
 psycopg2 = "*"
+pytube = {ref = "nfunc_regex_patch", git = "https://github.com/glubsy/pytube"}
 
 [dev-packages]
 
