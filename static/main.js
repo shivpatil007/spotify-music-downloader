@@ -23,7 +23,7 @@ function splist(i) {
             document.getElementById("sp-list").innerText="Youtube Song Url";
             }
             if (i==3) {
-            document.getElementById("sp-list").innerText="Youtube Artist Url";
+            document.getElementById("sp-list").innerText="Youtube Shorts Url";
             }
             if(i==4) {
             document.getElementById("sp-list").innerText="Youtube Album Url";
@@ -104,8 +104,12 @@ async function aTestFunction(id,typee) {
 function check_form_link(){
     var form = new FormData(document.getElementById("form"));
     var inputValue = form.get("to-dow-link");
-    if(inputValue.includes("https://open.spotify.com") || inputValue.includes("https://www.youtube.com")){
+    if((inputValue.includes("https://open.spotify.com")) || (inputValue.includes("https://www.youtube.com")) || (inputValue.includes("https://www.youtu.be"))){
         
+    }
+    else{
+        alert("Invalid Link");
+        return false;
     }
 }
 

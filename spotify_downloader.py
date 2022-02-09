@@ -1,6 +1,7 @@
 
 import glob
 import json
+import re
 import urllib.request
 import os
 import sys
@@ -25,8 +26,8 @@ def get_song_number(playlist_link):
 
 
 def music_name_extractor(track):
-    music_name = track["name"]+" " + \
-        sp.artist(track["artists"][0]["uri"])['name']
+    music_name = f'{track["name"]} {sp.artist(track["artists"][0]["uri"])["name"]}'
+
     music_name = unidecode.unidecode(music_name)
     music_name = imp_functions.replacesomthing(music_name)
     return "+".join(music_name.split(" "))
@@ -57,12 +58,12 @@ def youtube_part(vedio_id, id):
     from pytube.__init__ import YouTube
     try:
 
-        video_uls = "https://www.youtube.com/watch?v=" + vedio_id
+        video_uls = f'https://www.youtube.com/watch?v={vedio_id}'
         yt = YouTube(video_uls)
         video = yt.streams.filter(only_audio=True).first().download(
             output_path=os.getcwd()+"/music"+id)
         base, ext = os.path.splitext(video)
-        new_file = base + '.mp3'
+        new_file = f'{base}.mp3'
         os.rename(video, new_file)
         return 'currently <h4>"'+yt.title+'"</h4> is being converted...'
     except Exception as e:
@@ -73,7 +74,9 @@ def spoti_tube(music_name, id):
     import re
     try:
         html = urllib.request.urlopen(
-            "https://www.youtube.com/results?search_query="+music_name)
+            f'https://www.youtube.com/results?search_query={music_name}'
+        )
+
         vedio_id = re.findall(r"watch\?v=(\S{11})", html.read().decode())[0]
         youtube_part(vedio_id, id)
     except Exception as e:
@@ -86,7 +89,7 @@ def creating_zip(id, plalist_songs_name):
     from zipfile import ZipFile
     id = str(id)
     try:
-        with ZipFile('playlist'+id+'.zip', 'w') as myzip:
+        with ZipFile(f'playlist{id}.zip', 'w') as myzip:
             for song in plalist_songs_name:
                 myzip.write(os.getcwd()+"/music"+id + '/'+song)
         myzip.close()
@@ -114,3 +117,22 @@ def yt_playlist(data):
         return [i.split("=")[-1] for i in Playlist(data)]
     except Exception as e:
         print(e)
+
+
+def yt_track(data):
+    try:
+        if re.search('watch?v=', data):
+            return [data.split("=")[-1]]
+        else:
+            return [data.split("youtu.be/")[-1]]
+    except Exception as e:
+        print(e)
+
+
+def main_yt_downloder(data):
+    info = imp_functions.analyse_link_of_spotify_or_youtube(data)
+    if info == 'yt-playlist':
+        tracks = yt_playlist(data)
+    elif info == 'yt-track':
+        tracks = yt_track(data)
+    return tracks

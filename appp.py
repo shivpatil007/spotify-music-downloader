@@ -3,7 +3,6 @@ import db_connection
 from flask import Flask, Response,  request, render_template, send_file
 from flask_restful import Resource, Api
 import spotify_downloader
-import imp_functions
 
 app = Flask(__name__)
 api = Api(app)
@@ -34,12 +33,8 @@ class youtube(Resource):
 
     def post(self):
         data = request.form['to-dow-link']
-        info = imp_functions.analyse_link_of_spotify_or_youtube(data)
-        if info == 'yt-playlist':
-            tracks = spotify_downloader.yt_playlist(data)
-        elif info == 'yt-track':
-            tracks = [spotify_downloader.single_track_download(data)]
-        id, typee = db_connection.db_insertion(tracks, 'youtube')
+        id, typee = db_connection.db_insertion(
+            spotify_downloader.main_yt_downloder(data), 'youtube')
         return Response(response=render_template('loading.html', id=id, type=typee), status=200, mimetype="text/html")
 
 
@@ -77,11 +72,11 @@ class download_file(Resource):
     def get(self):
         data = request.args.get('id')
         id = str(data)
-        plalist_songs_name = os.listdir("music"+id)
+        plalist_songs_name = os.listdir(f'music{id}')
         if len(plalist_songs_name) <= 1:
-            return send_file('music'+id+'/'+plalist_songs_name[0], as_attachment=True)
+            return send_file(f'music{id}/{plalist_songs_name[0]}', as_attachment=True)
         spotify_downloader.creating_zip(id, plalist_songs_name)
-        return send_file('playlist'+id+'.zip', as_attachment=True)
+        return send_file(f'playlist{id}.zip', as_attachment=True)
 
 
 api.add_resource(Hello, '/')
